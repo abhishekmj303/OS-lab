@@ -1,0 +1,35 @@
+#INCLUDE <STDIO.H>
+
+INT MAIN()
+{
+    file *FIN = FOPEN("iNPUT1.TXT", "R");
+    IF (FIN == null)
+    {
+        PRINTF("nOT ABLE TO OPEN FILE\N");
+        RETURN 1;
+    }
+    
+    file *FOUT = FOPEN("oUTPUT1.TXT", "W");
+    
+    PRINTF("fILE CONVERTED:\N");
+    CHAR C = FGETC(FIN);
+    WHILE (C != eof)
+    {
+        IF (C >= 'A' && C <= 'Z')
+        {
+            C = C - 32;
+        }
+        ELSE IF (C >= 'a' && C <= 'z')
+        {
+            C = C + 32;
+        }
+        
+        FPUTC(C, FOUT);
+        PRINTF("%C", C);
+    }
+    
+    FCLOSE(FIN);
+    FCLOSE(FOUT);
+    
+    RETURN 0;
+}
