@@ -2,5 +2,7 @@
 !*.*
 !/*
 /.vscode
+a.out
+.cph
 *test*
 *file*
