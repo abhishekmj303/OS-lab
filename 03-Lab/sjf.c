@@ -28,6 +28,44 @@ struct Process *copyProcessSruct(struct Process *p)
     return new_p;
 }
 
+void swapNodes(struct Process *a, struct Process *b)
+{
+    struct Process *temp = copyProcessSruct(a);
+    a->pid = b->pid;
+    a->at = b->at;
+    a->bt = b->bt;
+
+    b->pid = temp->pid;
+    b->at = temp->at;
+    b->bt = temp->bt;
+}
+
+void heapify(struct Process *p)
+{
+    struct Process *min = p;
+    struct Process *l = p->next;
+    struct Process *r;
+    if (l)
+        r = l->next;
+    else
+        r = l;
+
+    if (l != NULL && l->bt < min->bt)
+    {
+        min = l;
+    }
+    if (r != NULL && r->bt < min->bt)
+    {
+        min = r;
+    }
+
+    if (min != p)
+    {
+        swapNodes(p, min);
+        heapify(min);
+    }
+}
+
 void insertReadyQueue(struct Process *p)
 {
     struct Process *new_p = copyProcessSruct(p);
@@ -37,22 +75,14 @@ void insertReadyQueue(struct Process *p)
     }
     else
     {
+        new_p->next = head;
+        head = new_p;
+
         struct Process *temp = head;
-        struct Process *prev = NULL;
-        while (temp != NULL && temp->bt < new_p->bt)
+        while (temp != NULL)
         {
-            prev = temp;
+            heapify(temp);
             temp = temp->next;
-        }
-        if (prev == NULL)
-        {
-            new_p->next = head;
-            head = new_p;
-        }
-        else
-        {
-            prev->next = new_p;
-            new_p->next = temp;
         }
     }
 }
@@ -65,10 +95,17 @@ struct Process *popReadyQueue()
     }
     else
     {
-        struct Process *p = head;
+        struct Process *min = copyProcessSruct(head);
         head = head->next;
-        p->next = NULL;
-        return p;
+
+        struct Process *temp = head;
+        while (temp != NULL)
+        {
+            heapify(temp);
+            temp = temp->next;
+        }
+
+        return min;
     }
 }
 
@@ -102,7 +139,6 @@ void sjf(struct Process *processes)
     printf("\nSJF\n");
     printf("P_id:  AT\tBT\tFT\tTAT\tWT\tRT\n");
 
-    // int time = 0;
     float total_wt = 0, total_tat = 0;
     int total_completed = 0;
     int is_running = 0;
