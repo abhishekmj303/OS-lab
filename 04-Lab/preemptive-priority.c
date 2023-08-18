@@ -101,7 +101,7 @@ Process *getProcessesAt(Process *processes, int time)
     return arr;
 }
 
-void roundRobin(Process *processes)
+void preemptivePriority(Process *processes)
 {
     int completed = 0;
     Process *p = NULL;
@@ -130,7 +130,7 @@ void roundRobin(Process *processes)
         {
             insertReadyQueue(p);
             p = popReadyQueue();
-            if (p != NULL && p->start_time == 0)
+            if (p != NULL && p->run_time == 0)
                 p->start_time = time;
         }
 
@@ -178,7 +178,7 @@ int main()
         processes[i] = p;
     }
     
-    roundRobin(processes);
+    preemptivePriority(processes);
     print_result(processes);
 
     free(processes);
