@@ -114,11 +114,6 @@ void roundRobin(Process *processes)
             insertReadyQueue(&arrived[i]);
         }
 
-        if (q_size == 0)
-        {
-            continue;
-        }
-
         if (p != NULL && p->bt == p->run_time)
         {
             p->ft = time;
@@ -135,11 +130,12 @@ void roundRobin(Process *processes)
         {
             insertReadyQueue(p);
             p = popReadyQueue();
-            if (p->start_time == 0)
+            if (p != NULL && p->start_time == 0)
                 p->start_time = time;
         }
 
-        p->run_time++;
+        if (p != NULL)
+            p->run_time++;
     }
 }
 
