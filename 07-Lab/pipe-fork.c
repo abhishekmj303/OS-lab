@@ -37,8 +37,8 @@ int main()
     }
     else if (pid == 0) // child process
     {
-        close(pipe1[1]); // read end
-        close(pipe2[0]); // write end
+        close(pipe1[1]); // write end
+        close(pipe2[0]); // read end
 
         char str[n];
         read(pipe1[0], str, sizeof(str));
